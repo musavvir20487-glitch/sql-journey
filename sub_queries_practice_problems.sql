@@ -1,0 +1,177 @@
+-- DATABASE SETUP
+
+-- CREATE DATABASE COMP;
+USE COMP;
+
+-- CREATE TABLE departments (
+--   dept_id   INT PRIMARY KEY,
+--   dept_name VARCHAR(50),
+--   budget    DECIMAL(12,2),
+--   location  VARCHAR(50)
+-- );
+
+-- CREATE TABLE employees (
+--   emp_id     INT PRIMARY KEY,
+--   name       VARCHAR(60),
+--   dept_id    INT,
+--   salary     DECIMAL(10,2),
+--   manager_id INT,
+--   hire_date  DATE,
+--   city       VARCHAR(40),
+--   FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
+-- );
+
+-- CREATE TABLE projects (
+--   proj_id    INT PRIMARY KEY,
+--   proj_name  VARCHAR(80),
+--   dept_id    INT,
+--   start_date DATE,
+--   end_date   DATE,
+--   budget     DECIMAL(12,2),
+--   FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
+-- );
+
+-- CREATE TABLE emp_projects (
+--   emp_id       INT,
+--   proj_id      INT,
+--   role         VARCHAR(40),
+--   hours_worked INT,
+--   PRIMARY KEY (emp_id, proj_id),
+--   FOREIGN KEY (emp_id) REFERENCES employees(emp_id),
+--   FOREIGN KEY (proj_id) REFERENCES projects(proj_id)
+-- );
+
+-- CREATE TABLE salaries_history (
+--   id             INT PRIMARY KEY AUTO_INCREMENT,
+--   emp_id         INT,
+--   salary         DECIMAL(10,2),
+--   effective_date DATE,
+--   FOREIGN KEY (emp_id) REFERENCES employees(emp_id)
+-- );
+
+-- -- INSERT DATA
+
+-- INSERT INTO departments VALUES
+-- (1,'Engineering',500000,'Hyderabad'),
+-- (2,'Marketing',200000,'Mumbai'),
+-- (3,'HR',150000,'Delhi'),
+-- (4,'Finance',300000,'Bangalore'),
+-- (5,'Operations',250000,'Chennai');
+
+-- INSERT INTO employees VALUES
+-- (101,'Musavvir',1,95000,NULL,'2020-06-01','Hyderabad'),
+-- (102,'Ayesha',1,82000,101,'2021-03-15','Hyderabad'),
+-- (103,'Ravi',2,60000,NULL,'2019-09-10','Mumbai'),
+-- (104,'Sneha',2,55000,103,'2022-01-20','Mumbai'),
+-- (105,'Arjun',3,48000,NULL,'2018-07-04','Delhi'),
+-- (106,'Priya',3,45000,105,'2023-02-28','Delhi'),
+-- (107,'Kiran',4,72000,NULL,'2020-11-01','Bangalore'),
+-- (108,'Divya',4,68000,107,'2021-08-17','Bangalore'),
+-- (109,'Suresh',5,53000,NULL,'2017-05-22','Chennai'),
+-- (110,'Meena',5,50000,109,'2022-06-30','Chennai'),
+-- (111,'Tarun',1,90000,101,'2020-07-15','Hyderabad'),
+-- (112,'Rina',2,62000,103,'2021-10-05','Mumbai');
+
+-- INSERT INTO projects VALUES
+-- (1,'DataPipeline',1,'2023-01-01','2023-12-31',120000),
+-- (2,'CampaignX',2,'2023-03-01','2023-09-30',80000),
+-- (3,'HRPortal',3,'2023-02-15','2024-02-15',60000),
+-- (4,'FinAudit',4,'2023-06-01','2024-01-31',90000),
+-- (5,'OpsStream',5,'2023-04-01','2023-10-31',75000),
+-- (6,'AIEngine',1,'2023-07-01','2024-06-30',200000);
+
+-- INSERT INTO emp_projects VALUES
+-- (101,1,'Lead',300),(101,6,'Lead',150),
+-- (102,1,'Dev',400),(102,6,'Dev',200),
+-- (111,1,'Dev',350),(111,6,'Analyst',100),
+-- (103,2,'Lead',280),(104,2,'Exec',200),
+-- (112,2,'Analyst',180),
+-- (105,3,'Lead',250),(106,3,'HR Coord',200),
+-- (107,4,'Lead',320),(108,4,'Analyst',280),
+-- (109,5,'Lead',300),(110,5,'Ops',220);
+
+-- INSERT INTO salaries_history (emp_id, salary, effective_date) VALUES
+-- (101,80000,'2020-06-01'),(101,90000,'2022-01-01'),(101,95000,'2023-07-01'),
+-- (102,70000,'2021-03-15'),(102,82000,'2023-01-01'),
+-- (103,55000,'2019-09-10'),(103,60000,'2022-06-01'),
+-- (107,65000,'2020-11-01'),(107,72000,'2023-03-01'),
+-- (109,48000,'2017-05-22'),(109,53000,'2021-09-01');
+select * from employees;
+select * from departments;
+-- select * from projects;
+-- select * from emp_projects;
+-- select * from salaries_history;
+-- ============ SUBQUERIES (BASIC) =============
+-- -- Q001 :- Find all employees whose salary is greater than the overall average salary of the company.
+-- select emp_id,name,salary 
+-- from employees 
+-- where salary > (select avg(salary) from employees);
+-- -- Q002 :- List all employees who work in the "Engineering" department using a subquery (do not hardcode the dept_id).
+-- select emp_id, name, dept_id 
+-- from employees 
+-- where dept_id =
+--  (select dept_id from departments where dept_name = 'Engineering' )
+-- -- Q003 :- Find the name and budget of the department that has the maximum budget
+-- select dept_name, budget 
+-- from departments 
+-- where budget = (select max(budget) from departments );
+-- -- Q004 :- Find all employees who are assigned to at least one project.
+-- select emp_id, name 
+-- from employees 
+-- where emp_id IN (select distinct emp_id from emp_projects);
+-- -- Q005 :- Find all employees who have not been assigned to any project.
+-- select emp_id, name 
+-- from employees 
+-- where emp_id NOT IN (SELECT distinct emp_id from emp_projects);
+-- ============ SUBQUERIES (INTERMEDIATE) =============
+-- -- Q006 :- Find the employee with the highest salary in each department. Show the department name, employee name, and salary.
+-- select  d.dept_name,e.name, e.salary 
+--  from employees e join departments d 
+--  on e.dept_id = d.dept_id
+--  where e.salary = (select max(e2.salary) from employees e2
+--  where e2.dept_id = e.dept_id);
+-- select d.dept_name, e.name, e.salary 
+-- from employees e join departments d 
+-- on e.dept_id = d.dept_id
+-- where (salary) in (select max(salary) from employees group by dept_id);
+-- -- Q007 :- List employees who earn more than the average salary of their own department.
+-- select * from (select e.name, e.dept_id, e.salary, 
+-- (select round(avg(salary),2) 
+-- from employees e1 where e1.dept_id = e.dept_id) as dept_avg_salary
+-- from employees e join departments d 
+-- on e.dept_id = d.dept_id ) t
+-- where salary > dept_avg_salary;
+-- -- Q008 :- Find all projects whose budget exceeds the average budget across all projects. Show project name, department name, and budget.
+-- select p.proj_name, d.dept_name, p.budget
+-- from projects p join departments d 
+-- on p.dept_id = d.dept_id 
+-- where p.budget > (select avg(budget) from projects );
+-- -- Q009 :- Find the second highest distinct salary in the company. Return NULL if it does not exist.
+-- select (select distinct salary
+-- from employees 
+-- order by salary desc
+-- limit 1 offset 1) as SecondHighestSalary;
+-- -- Q010 :-  Find employees who are assigned to more projects than the average number of projects per employee.
+-- select e.emp_id, e.name, count(ep.proj_id) as project_count
+-- from employees e join emp_projects ep
+-- on e.emp_id = ep.emp_id
+-- group by e.emp_id, e.name
+-- having count(ep.proj_id) > (
+--       select avg(proj_count) from (select count(proj_id) as proj_count 
+--                                    from emp_projects group by emp_id ) as sub );
+-- ============ SUBQUERIES (ADVANCED) =============
+-- -- Q011 :- Find departments where every single employee earns more than 50,000. Use a NOT EXISTS or ALL approach.
+-- select d.dept_name 
+-- from departments d
+--  where not exists (select  1 from employees e
+--                   where e.dept_id = d.dept_id and e.salary <= 50000);
+-- -- Q012:-  Write a query to find the 3rd highest salary in each department using only subqueries (no window functions). Show dept_name, employee name, and salary.
+-- SELECT d.dept_name, e.name, e.salary
+-- FROM employees e
+-- JOIN departments d ON e.dept_id = d.dept_id
+-- WHERE (
+--   SELECT COUNT(DISTINCT e2.salary)
+--   FROM employees e2
+--   WHERE e2.dept_id = e.dept_id
+--   AND e2.salary > e.salary
+-- ) = 2;
