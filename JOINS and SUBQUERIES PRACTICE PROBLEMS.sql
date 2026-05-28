@@ -1,0 +1,129 @@
+-- Create Tables
+-- CREATE TABLE employees (
+--     emp_id INT PRIMARY KEY,
+--     name VARCHAR(50),
+--     dept_id INT,
+--     salary INT,
+--     manager_id INT
+-- );
+
+-- CREATE TABLE departments (
+--     dept_id INT PRIMARY KEY,
+--     dept_name VARCHAR(50),
+--     location VARCHAR(50)
+-- );
+
+-- CREATE TABLE projects (
+--     project_id INT PRIMARY KEY,
+--     project_name VARCHAR(50),
+--     dept_id INT,
+--     budget INT
+-- );
+
+-- CREATE TABLE emp_projects (
+--     emp_id INT,
+--     project_id INT
+-- );
+
+-- Insert Data
+-- INSERT INTO departments VALUES
+-- (1, 'Engineering', 'Hyderabad'),
+-- (2, 'Marketing', 'Mumbai'),
+-- (3, 'HR', 'Delhi'),
+-- (4, 'Finance', 'Bangalore'),
+-- (5, 'Operations', 'Chennai');
+
+-- INSERT INTO employees VALUES
+-- (101, 'Arjun',   1, 95000,  NULL),
+-- (102, 'Priya',   1, 82000,  101),
+-- (103, 'Rahul',   2, 60000,  NULL),
+-- (104, 'Sneha',   2, 55000,  103),
+-- (105, 'Vikram',  3, 48000,  NULL),
+-- (106, 'Neha',    3, 45000,  105),
+-- (107, 'Karan',   4, 72000,  NULL),
+-- (108, 'Divya',   4, 68000,  107),
+-- (109, 'Amit',    1, 91000,  101),
+-- (110, 'Pooja',   NULL, 40000, NULL);  -- no department
+
+-- INSERT INTO projects VALUES
+-- (201, 'Data Pipeline',    1, 500000),
+-- (202, 'Ad Campaign',      2, 200000),
+-- (203, 'Recruitment Tool', 3, 150000),
+-- (204, 'Budget Tracker',   4, 300000),
+-- (205, 'Cloud Migration',  1, 800000),
+-- (206, 'Unassigned Proj',  NULL, 100000);
+
+-- INSERT INTO emp_projects VALUES
+-- (101, 201),
+-- (101, 205),
+-- (102, 201),
+-- (103, 202),
+-- (104, 202),
+-- (107, 204),
+-- (109, 205),
+-- (109, 201);
+select * from employees;
+select * from departments ; 
+select * from projects ;
+select * from emp_projects ; 
+-- ======== SQL JOIN Questions (Intermediate Level) ==========
+-- --  Q001 :- List each department name and the total salary of all employees in it. Only show departments that have at least one employee. Order by total salary descending.
+-- select d.dept_name, sum(e.salary) as total_salary
+-- from departments d join employees e 
+-- on d.dept_id = e.dept_id 
+-- group by d.dept_name 
+-- order by total_salary desc ;
+-- -- Q002 :- Find all employees who are NOT assigned to any project. Show their name and department name. Include employees with no department too.
+-- select e.name, d.dept_name
+-- from employees e left join emp_projects ep 
+-- on e.emp_id = ep.emp_id 
+-- left join departments d on e.dept_id = d.dept_id 
+-- where ep.project_id is null
+-- -- Q003 :-  Self JoinFor each employee who has a manager, show the employee's name, their salary, and their manager's name. Only show rows where the employee earns MORE than 60,000.
+-- select e1.name as employee_name, e1.salary as employee_salary, e2.name as manager_name
+-- from employees e1 join employees e2 
+-- on e1.manager_id = e2.emp_id 
+-- where e1.salary > 60000 ;
+-- -- Q004 :- List all projects along with the department name and the count of employees working on each project. Include projects even if no employees are assigned. Order by employee count descending.
+-- select p.project_name , d.dept_name, count(ep.emp_id) as employee_count
+-- from projects p left join emp_projects ep 
+-- on p.project_id = ep.project_id 
+-- left join departments d on p.dept_id = d.dept_id
+-- group by p.project_name , d.dept_name
+-- order by employee_count desc;
+-- -- Q005 :- Find departments where the average salary of employees is greater than the overall average salary of ALL employees. Show department name and average salary (rounded to 2 decimal places).
+-- select d.dept_name, round(avg(e.salary),2) as avg_salary
+-- from employees e join departments d 
+-- on e.dept_id = d.dept_id 
+-- group by d.dept_name
+-- having avg(e.salary) > (select avg(salary)  from employees ) ;
+-- -- ======== SQL SUBQUERY Questions (Intermediate Level) =========
+-- -- Q006 :- Find all employees whose salary is greater than the average salary of the Engineering department (dept_id = 1). Show their name, salary, and department name.
+-- select e.name, e.salary,d.dept_name 
+-- from employees e join departments d 
+-- on e.dept_id = d.dept_id
+-- where e.salary > (select avg(salary) from employees where dept_id = 1 );
+-- -- Q007 :- For each department, find the employee who earns the highest salary in that department. Show department name, employee name, and salary.
+-- select d.dept_name, e.name, e.salary
+-- from employees e join departments d 
+-- on e.dept_id = d.dept_id
+-- where e.salary in (select max(salary) from employees e1
+--                     where e1.dept_id = e.dept_id);
+-- -- Q008 :- Find the department with the maximum total budget across all its projects. Show the department name and total budget.
+-- select dept_name, sum_budget as total_budget from 
+-- (select d.dept_name, sum(p.budget) as sum_budget
+-- from departments d join projects p 
+-- on d.dept_id = p.dept_id 
+-- group by d.dept_name) k 
+-- order by total_budget desc
+-- limit 1
+-- -- Q009 :-  Find all employees who are working on at least one project AND belong to the Engineering department. Show their name and salary.
+-- select e.name , e.salary 
+-- from employees e 
+-- where exists (select 1 from emp_projects ep where ep.emp_id = e.emp_id )
+-- and e.dept_id = 1
+-- -- Q010 :- Find departments that have NO projects assigned to them. Show the department name and location.
+-- select d.dept_name, d.location
+-- from departments d 
+-- where not exists (select 1 from projects p where p.dept_id = d.dept_id)
+-- -- =========== THE END ============
