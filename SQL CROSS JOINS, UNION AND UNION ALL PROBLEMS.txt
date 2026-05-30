@@ -1,0 +1,162 @@
+-- CREATE TABLE employee (
+--     emp_id      INT PRIMARY KEY,
+--     first_name  VARCHAR(30),
+--     last_name   VARCHAR(30),
+--     dept_id     INT,
+--     salary      INT,
+--     hire_date   DATE,
+--     email       VARCHAR(60),
+--     phone       VARCHAR(15),
+--     manager_id  INT
+-- );
+
+-- CREATE TABLE department (
+--     dept_id   INT PRIMARY KEY,
+--     dept_name VARCHAR(50),
+--     location  VARCHAR(50)
+-- );
+
+-- CREATE TABLE sales (
+--     sale_id   INT PRIMARY KEY,
+--     emp_id    INT,
+--     amount    DECIMAL(10,2),
+--     sale_date DATE,
+--     region    VARCHAR(30)
+-- );
+
+-- CREATE TABLE products (
+--     product_id   INT PRIMARY KEY,
+--     product_name VARCHAR(50),
+--     category     VARCHAR(30),
+--     price        DECIMAL(10,2)
+-- );
+
+-- CREATE TABLE sizes (
+--     size_id   INT PRIMARY KEY,
+--     size_name VARCHAR(10)
+-- );
+
+-- CREATE TABLE colors (
+--     color_id   INT PRIMARY KEY,
+--     color_name VARCHAR(20)
+-- );
+
+-- CREATE TABLE ex_employees (
+--     emp_id            INT PRIMARY KEY,
+--     first_name        VARCHAR(30),
+--     last_name         VARCHAR(30),
+--     dept_id           INT,
+--     last_working_date DATE,
+--     email             VARCHAR(60)
+-- );
+-- INSERT INTO department VALUES
+-- (1, 'Engineering', 'Hyderabad'),
+-- (2, 'Marketing',   'Mumbai'),
+-- (3, 'HR',          'Delhi'),
+-- (4, 'Finance',     'Bangalore');
+
+-- INSERT INTO employee VALUES
+-- (101, 'Arjun',  'Sharma', 1, 95000, '2020-01-15', 'arjun.sharma@company.com',  '9876543210', NULL),
+-- (102, 'Priya',  'Verma',  1, 82000, '2021-03-20', 'priya.verma@company.com',   '9876543211', 101),
+-- (103, 'Amit',   'Kumar',  1, 91000, '2019-06-10', 'amit.kumar@company.com',    NULL,         101),
+-- (104, 'Rahul',  'Singh',  2, 60000, '2020-09-01', 'rahul.singh@company.com',   '9876543213', NULL),
+-- (105, 'Sneha',  'Patel',  2, 55000, '2022-01-10', 'sneha.patel@company.com',   '9876543214', 104),
+-- (106, 'Vikram', 'Nair',   3, 48000, '2021-07-15', NULL,                        '9876543215', NULL),
+-- (107, 'Neha',   'Joshi',  3, 45000, '2023-02-28', 'neha.joshi@company.com',    '9876543216', 106),
+-- (108, 'Karan',  'Mehta',  4, 72000, '2020-11-05', 'karan.mehta@company.com',   NULL,         NULL),
+-- (109, 'Divya',  'Rao',    4, 68000, '2021-08-20', 'divya.rao@company.com',     '9876543218', 108),
+-- (110, 'Pooja',  'Das',    1, 77000, '2022-05-14', 'pooja.das@company.com',     '9876543219', 101),
+-- (111, 'Rohan',  'Gupta',  2, 62000, '2020-12-01', 'rohan.gupta@company.com',   '9876543220', 104),
+-- (112, 'Anita',  'Shah',   NULL, 40000, '2023-01-10', 'anita.shah@company.com', '9876543221', NULL);
+
+-- INSERT INTO sales VALUES
+-- (1,  101, 15000, '2024-01-10', 'North'),
+-- (2,  102, 12000, '2024-01-15', 'South'),
+-- (3,  103, 18000, '2024-01-20', 'North'),
+-- (4,  101, 20000, '2024-02-05', 'East'),
+-- (5,  104,  9000, '2024-02-10', 'West'),
+-- (6,  105,  8500, '2024-02-15', 'South'),
+-- (7,  101, 25000, '2024-03-01', 'North'),
+-- (8,  103, 16000, '2024-03-10', 'East'),
+-- (9,  104, 11000, '2024-03-20', 'West'),
+-- (10, 102, 14000, '2024-04-05', 'North'),
+-- (11, 111, 13000, '2024-04-10', 'South'),
+-- (12, 108, 19000, '2024-04-15', 'East'),
+-- (13, 109, 17000, '2024-05-01', 'West'),
+-- (14, 101, 22000, '2024-05-10', 'North'),
+-- (15, 103, 21000, '2024-05-20', 'East');
+
+-- INSERT INTO products VALUES
+-- (1, 'T-Shirt',      'Clothing',    499.00),
+-- (2, 'Jeans',        'Clothing',   1299.00),
+-- (3, 'Sneakers',     'Footwear',   2499.00),
+-- (4, 'Formal Shoes', 'Footwear',   3499.00),
+-- (5, 'Backpack',     'Accessories',1499.00);
+
+-- INSERT INTO sizes VALUES
+-- (1,'S'), (2,'M'), (3,'L'), (4,'XL');
+
+-- INSERT INTO colors VALUES
+-- (1,'Red'), (2,'Blue'), (3,'Black'), (4,'White');
+
+-- INSERT INTO ex_employees VALUES
+-- (201, 'Sanjay', 'Tiwari', 1, '2023-06-30', 'arjun.sharma@company.com'),
+-- (202, 'Meena',  'Pillai', 2, '2023-09-15', 'meena.pillai@gmail.com'),
+-- (203, 'Deepak', 'Sharma', 3, '2022-12-31', 'deepak.sharma@gmail.com'),
+-- (204, 'Arjun',  'Sharma', 1, '2024-01-20', 'arjun.sharma@company.com');
+-- select * from employee;
+-- select * from department;
+-- select * from sales; 
+-- select * from products ;
+-- select * from sizes;
+-- select * from colors;
+-- select * from ex_employees;
+-- -- ============ SQL Cross Join — 4 Questions=============
+-- -- Q011 :- Generate all possible product + size combinations. Show product_name and size_name. 
+-- select p.product_name, s.size_name 
+-- from products p cross join sizes s;
+-- -- Q012 :- Three-way Cross Join Generate all combinations of product + color + size.
+-- select p.product_name, c.color_name, s.size_name 
+-- from products p
+--  cross join colors c 
+-- cross join sizes s ;
+-- -- Q013 :- find all (employee, department) pairs where the employee does NOT belong to that department
+-- select e.first_name,e.dept_id as current_dept_id , d.dept_name 
+-- from employee  e cross join department d
+-- where e.dept_id != d.dept_id or e.dept_id is null;
+-- -- Q014 :- generate all unique pairs of employees who are in the Engineering department (dept_id = 1). Avoid duplicates (emp1 < emp2). Show both names.
+-- select e1.first_name as employee_1, e2.first_name as employee_2 
+-- from employee e1 cross join employee e2
+-- where e1.dept_id = 1 and e2.dept_id = 1 and e1.emp_id < e2.emp_id ;
+-- -- ========== SQL Union & Union All — 5 Questions ===========
+-- -- Q015 :- Get a combined list of all unique first names from both employees and ex_employees. Order alphabetically.
+-- select first_name from employee
+-- union 
+-- select first_name from ex_employees 
+-- order by first_name asc;
+-- -- Q016 :-  UNION ALL vs UNIONWrite two queries — one with UNION ALL and one with UNION — to combine all emails from employees and ex_employees. Show the count from each to find how many duplicate emails exist.
+-- select count(*) as union_count from (
+-- select email from employee 
+-- union 
+-- select email from ex_employees ) t;
+-- select count(*) as union_count from (
+-- select email from employee 
+-- union all
+-- select email from ex_employees ) t;
+-- -- Q017 :- Create a combined employee report with a status column. Current employees show as 'Active', ex-employees show as 'Former'. Show first_name, last_name, dept_id, status. Order by last_name.alteR
+-- select first_name, last_name, dept_id, 
+-- 'Active' as status from employee
+-- union 
+-- select first_name, last_name, dept_id,
+-- 'Former' as status from ex_employees 
+-- order by last_name ;
+-- -- Q018 :- Find emails that exist in BOTH employees and ex_employees tables (MySQL has no INTERSECT)
+-- select distinct e.email from employee e
+-- where e.email in (select email from ex_employees )
+-- and e.email is not null ;
+-- -- Q019 :- The highest salary per department from employeesThe dept_id and a fixed label 'Ex-Employee Max N/A' for ex_employees (they have no salary)
+-- select dept_id, max(salary) as highest_salary 
+-- from employee group by dept_id
+-- union
+-- select dept_id, 0 as higest_salary
+-- from ex_employees 
